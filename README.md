@@ -360,7 +360,7 @@ for image in glob.glob('test_images/test*.jpg'):
 At this point I was able to use the combined binary image to isolate lane line pixels and fit a polynomial to each of the lane lines. The space in between the identified lane lines is filled in to highlight the driveable area in the lane. The position of the vehicle was measured by taking the average of the x intercepts of each line.
 
 The equation for calculating radius of curvature is defined as:
-For a plane curve given by the equation $$y = f\left( x \right)$$, the curvature at a point $$M\left( {x,y} \right)$$ is expressed in terms of the first and second derivatives of the function $$f\left( x \right)$$ by the formula:
+For a plane curve given by the equation ${y = f\left( x \right)}$, the curvature at a point $$M\left( {x,y} \right)$$ is expressed in terms of the first and second derivatives of the function $$f\left( x \right)$$ by the formula:
 
 $$K = \frac{{\left| {y^{\prime\prime}\left( x \right)} \right|}}{{{{\left[ {1 + {{\left( {y’\left( x \right)} \right)}^2}} \right]}^{\large\frac{3}{2}\normalsize}}}}$$.
 
@@ -615,7 +615,7 @@ class Line:
         ym_per_pix = 30./720 # meters per pixel in y dimension
         xm_per_pix = 3.7/700 # meteres per pixel in x dimension
         fit_cr = np.polyfit(yvals*ym_per_pix, xvals*xm_per_pix, 2)
-        curverad = ((1 + (2*fit_cr[0]*np.max(yvals) + fit_cr[1])**2)**1.5) \
+        curverad = ((1 + (2*fit_cr[0]*np.max(yvals)*ym_per_pix + fit_cr[1])**2)**1.5) \
                                      /np.absolute(2*fit_cr[0])
         return curverad
     
@@ -943,3 +943,22 @@ HTML("""
 ```python
 
 ```
+## Discussion
+
+
+#### Gradient & Color Thresholding
+
+I spent quite a lot time tweeking with the gradient and color channnel thresholding. The lanes lines in the challenge and harder challenge videos were much more difficult to detect. This could be due to the fact that they are either bright or too dull. This prompted me to have R & G channel thresholding and L channel thresholding applied in the **apply_thresholds** function.
+
+#### Under the tunnel 
+
+The challenge video has a section where the car goes underneath a tunnel and no lanes are detected because of the sudden change in lighting conditions and a cast shadow underneath the bridge. To tackle this I had to resort to averaging over the previous well detected frames The lanes in the challenge video change in color, shape and direction. I had to experiment with color threholds to tackle this. Ultimately I had to make use of R, G channels and L channel thresholds.
+
+#### Harder Challenge Video improvements
+
+The pipeline doesn't work well for the harder challenge video. The video has sharper turns, curves and at very short intervals.
+Probably the best way to improve the lane detection is:
+
+* Take a better perspective transform: Choose a smaller section to take the transform since this video has sharper turns, curves and the length of a lane is shorter than the other videos.
+
+* Adjust the number of frames by: By averaging to so as to use a smaller number of frames: Currently my frame rate is too high. This fails for the harder challenge video since the shape and direction of lanes changes quite fast.
