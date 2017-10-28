@@ -2,7 +2,7 @@
 # Advanced Lane Finding
 ![Advance Lane Finding](images/AdvancedLaneFinding.png)
 
-In this project, your goal is to write a software pipeline to identify the lane boundaries in a video from a front-facing camera on a car. The camera calibration is done with a chessboard size to 9x6. The output is an annotated video which identifies:
+In this project, my goal is to write a software pipeline to identify the lane boundaries in a video from a front-facing camera on a car. The camera calibration is done with a chessboard size to 9x6. The output is an annotated video which identifies:
 
 * The positions of the lane lines 
 * The location of the vehicle relative to the center of the lane
@@ -360,18 +360,18 @@ for image in glob.glob('test_images/test*.jpg'):
 At this point I was able to use the combined binary image to isolate lane line pixels and fit a polynomial to each of the lane lines. The space in between the identified lane lines is filled in to highlight the driveable area in the lane. The position of the vehicle was measured by taking the average of the x intercepts of each line.
 
 The equation for calculating radius of curvature is defined as:
-For a plane curve given by the equation $y = f\left( x \right)$ the curvature at a point $$M\left( {x,y} \right)$$ is expressed in terms of the first and second derivatives of the function $$f\left( x \right)$$ by the formula:
+For a plane curve given by the equation $y = f\left( x \right)$ the curvature at a point $M\left( {x,y} \right)$ is expressed in terms of the first and second derivatives of the function $$f\left( x \right)$$ by the formula:
 
-$$K = \frac{{\left| {y^{\prime\prime}\left( x \right)} \right|}}{{{{\left[ {1 + {{\left( {y’\left( x \right)} \right)}^2}} \right]}^{\large\frac{3}{2}\normalsize}}}}$$.
+$K = \frac{{\left| {y^{\prime\prime}\left( x \right)} \right|}}{{{{\left[ {1 + {{\left( {y’\left( x \right)} \right)}^2}} \right]}^{\large\frac{3}{2}\normalsize}}}}$.
 
-If a curve is defined in parametric form by the equations $$x = x\left( t \right)$$, $$y = y\left( t \right)$$, then its curvature at any point $$M\left( {x,y} \right)$$ is given by:
+If a curve is defined in parametric form by the equations $x = x\left( t \right)$, $y = y\left( t \right)$, then its curvature at any point $M\left( {x,y} \right)$ is given by:
 
-$$K = \frac{{\left| {x’y^{\prime\prime} – y’x^{\prime\prime}} \right|}}{{{{\left[ {{{\left( {x’} \right)}^2} + {{\left( {y’} \right)}^2}} \right]}^{\large\frac{3}{2}\normalsize}}}}$$
+$K = \frac{{\left| {x’y^{\prime\prime} – y’x^{\prime\prime}} \right|}}{{{{\left[ {{{\left( {x’} \right)}^2} + {{\left( {y’} \right)}^2}} \right]}^{\large\frac{3}{2}\normalsize}}}}$
 
-For a lane line that is close to vertical, we fit a line using the polynomial formula: $$f\left( y \right) = Ax^2+Bx+C$$, where A, B, and C are coefficients.
+For a lane line that is close to vertical, we fit a line using the polynomial formula: $f\left( y \right) = Ax^2+Bx+C$, where A, B, and C are coefficients.
 
 In the function `fill_lane()` below, lane lines are detected by identifying peaks in a histogram of the image and detecting nonzero pixels in close proximity to the peaks. 
-$$e^x=\sum_{i=0}^\infty \frac{1}{i!}x^i$$
+
 
 ```python
 def fill_lane(image):
